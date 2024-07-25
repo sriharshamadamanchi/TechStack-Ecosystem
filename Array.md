@@ -445,9 +445,76 @@ const arr4 = [1, 2, [3, 4, [5, 6, [7, 8, [9, 10]]]]];
 arr4.flat(Infinity);
 // [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 ```
+### Array.prototype.flatMap()
+The flatMap() method of Array instances returns a new array formed by applying a given callback function to each element of the array, and then flattening the result by one level. It is identical to a map() followed by a flat() of depth 1 (arr.map(...args).flat()), but slightly more efficient than calling those two methods separately.
+```javascript
+const arr1 = [1, 2, 3, 4];
 
+arr1.map((x) => [x * 2]);
+// [[2], [4], [6], [8]]
 
+arr1.flatMap((x) => [x * 2]);
+// [2, 4, 6, 8]
 
+// only one level is flattened
+arr1.flatMap((x) => [[x * 2]]);
+// [[2], [4], [6], [8]]
+```
+```javascript
+const arr1 = ["it's Sunny in", "", "California"];
+
+arr1.map((x) => x.split(" "));
+// [["it's","Sunny","in"],[""],["California"]]
+
+arr1.flatMap((x) => x.split(" "));
+// ["it's","Sunny","in", "", "California"]
+```
+### Array.prototype.forEach()
+The forEach() method of Array instances executes a provided function once for each array element.
+```javascript
+const items = ["item1", "item2", "item3"];
+const copyItems = [];
+
+// before
+for (let i = 0; i < items.length; i++) {
+  copyItems.push(items[i]);
+}
+
+// after
+items.forEach((item) => {
+  copyItems.push(item);
+});
+```
+```javascript
+const logArrayElements = (element, index /*, array */) => {
+  console.log(`a[${index}] = ${element}`);
+};
+
+// Notice that index 2 is skipped, since there is no item at
+// that position in the array.
+[2, 5, , 9].forEach(logArrayElements);
+// Logs:
+// a[0] = 2
+// a[1] = 5
+// a[3] = 9
+```
+```javascript
+const flatten = (arr) => {
+  const result = [];
+  arr.forEach((item) => {
+    if (Array.isArray(item)) {
+      result.push(...flatten(item));
+    } else {
+      result.push(item);
+    }
+  });
+  return result;
+};
+
+// Usage
+const nested = [1, 2, 3, [4, 5, [6, 7], 8, 9]];
+console.log(flatten(nested)); // [1, 2, 3, 4, 5, 6, 7, 8, 9]
+```
 
 
 
